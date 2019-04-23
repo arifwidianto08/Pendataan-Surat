@@ -2,9 +2,10 @@
 session_start();
 
 if (!isset($_SESSION["login"])) {
-    header("Location: ./login.php");
-    exit;
+  header("Location: ./login.php");
+  exit;
 };
+
 
 include("./config/config.php");
 
@@ -25,6 +26,10 @@ while ($admin_data = mysqli_fetch_array($result)) {
 }
 
 ?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,6 +60,10 @@ while ($admin_data = mysqli_fetch_array($result)) {
     <link href="../vendors/starrr/dist/starrr.css" rel="stylesheet">
     <!-- bootstrap-daterangepicker -->
     <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- PNotify -->
+    <link href="../vendors/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="../vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="../vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
     <link href="../build/css/custom.min.css" rel="stylesheet">
@@ -256,7 +265,7 @@ while ($admin_data = mysqli_fetch_array($result)) {
                 <div class="">
                     <div class="page-title">
                         <div class="title_left">
-                            <h3>Form Elements</h3>
+                            <h3>Tambah Admin</h3>
                         </div>
 
                         <div class="title_right">
@@ -275,7 +284,7 @@ while ($admin_data = mysqli_fetch_array($result)) {
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>Form Design <small>different form elements</small></h2>
+                                    <h2>Tambah Admin baru </h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
@@ -361,7 +370,7 @@ while ($admin_data = mysqli_fetch_array($result)) {
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Konfirmasi Password <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="password" id="last-name" name="password-confirmation" required="required" class="form-control col-md-7 col-xs-12">
+                                                <input type="password" id="last-name" name="password_confirmation" required="required" class="form-control col-md-7 col-xs-12">
                                             </div>
                                         </div>
 
@@ -369,12 +378,11 @@ while ($admin_data = mysqli_fetch_array($result)) {
                                         <div class="ln_solid"></div>
                                         <div class="form-group">
                                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                                <button class="btn btn-primary" type="button">Cancel</button>
+
                                                 <button class="btn btn-primary" type="reset">Reset</button>
                                                 <button type="submit" name="submited" class="btn btn-success">Submit</button>
                                             </div>
                                         </div>
-
                                     </form>
                                 </div>
                             </div>
@@ -429,6 +437,10 @@ while ($admin_data = mysqli_fetch_array($result)) {
             <script src="../vendors/starrr/dist/starrr.js"></script>
             <!-- Custom Theme Scripts -->
             <script src="../build/js/custom.min.js"></script>
+            <!-- PNotify -->
+            <script src="../vendors/pnotify/dist/pnotify.js"></script>
+            <script src="../vendors/pnotify/dist/pnotify.buttons.js"></script>
+            <script src="../vendors/pnotify/dist/pnotify.nonblock.js"></script>
 
 
 
@@ -445,7 +457,7 @@ while ($admin_data = mysqli_fetch_array($result)) {
                 $alamat = $_POST['alamat'];
                 $jabatan = $_POST['jabatan'];
                 $telepon = $_POST['telepon'];
-                $password = $_POST['password'];
+                $password_confirmation = $_POST['password_confirmation'];
 
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
@@ -454,17 +466,54 @@ while ($admin_data = mysqli_fetch_array($result)) {
                 $getEmail = mysqli_query($connect, "SELECT email FROM admin WHERE email ='$email'");
 
                 if (mysqli_fetch_assoc($getUsername)) {
-                    echo "<script>alert('Sign Up Gagal,Username sudah dipakai')</script>";
+                    echo ("<script>
+                    new PNotify({
+                                  title: 'Error',
+                                  text: 'Sign Up Gagal,Username sudah dipakai',
+                                  type: 'error',
+                                  styling: 'bootstrap3'
+                              })</script>");
+
                     return false;
                 } else if (mysqli_fetch_assoc($getNip)) {
-                    echo "<script>alert('Sign Up Gagal,NIP sudah dipakai')</script>";
+                    echo ("<script>
+                    new PNotify({
+                                  title: 'Error',
+                                  text: 'Sign Up Gagal,NIP sudah dipakai',
+                                  type: 'error',
+                                  styling: 'bootstrap3'
+                              })</script>");
+
                     return false;
                 } else if (mysqli_fetch_assoc($getEmail)) {
-                    echo "<script>alert('Sign Up Gagal,Email sudah dipakai')</script>";
+                    echo ("<script>
+                    new PNotify({
+                                  title: 'Error',
+                                  text: 'Sign Up Gagal,Email sudah dipakai',
+                                  type: 'error',
+                                  styling: 'bootstrap3'
+                              })</script>");
+                    return false;
+                } else if ($password_confirmation !== $password) {
+                    echo ("<script>
+                    new PNotify({
+                                  title: 'Error',
+                                  text: 'Sign Up Gagal,Password Konfirmasi tidak sesuai',
+                                  type: 'error',
+                                  styling: 'bootstrap3'
+                              })</script>");
                     return false;
                 } else {
                     $sql = " INSERT INTO `admin`(`id`, `nama`, `telepon`, `nip`, `jabatan`, `alamat`, `username`, `password_user`, `email`) VALUES ('  ','$nama  ','$telepon  ','$nip  ','$jabatan  ','$alamat  ','$username  ','$hashedPassword', '$email')";
                     mysqli_query($connect, $sql);
+                    echo ("<script>
+                    new PNotify({
+                                  title: 'Sukses',
+                                  text: 'Berhasil Menambahkan Admin',
+                                  type: 'success',
+                                  styling: 'bootstrap3'
+                              })</script>");
+                    header("Location: ./table_admin.php");          
                 };
             };
 

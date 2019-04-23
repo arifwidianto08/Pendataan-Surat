@@ -2,18 +2,18 @@
 session_start();
 
 if (!isset($_SESSION["login"])) {
-    header("Location: ./login.php");
-    exit;
+  header("Location: ./login.php");
+  exit;
 };
 
 include("./config/config.php");
 
 $id_admin = $_SESSION["user_id"];
 // echo "<script>console.log('$id_admin')</script>";
-$sql = "SELECT * FROM admin WHERE id=$id_admin";
-$result = mysqli_query($connect, $sql);
+$sql_admin = "SELECT * FROM admin WHERE id=$id_admin";
+$admin = mysqli_query($connect, $sql_admin);
 
-while ($admin_data = mysqli_fetch_array($result)) {
+while ($admin_data = mysqli_fetch_array($admin)) {
     $data_nama = $admin_data['nama'];
     $data_telepon = $admin_data['telepon'];
     $data_nip = $admin_data['nip'];
@@ -23,6 +23,10 @@ while ($admin_data = mysqli_fetch_array($result)) {
     $data_email = $admin_data['email'];
     $id = $admin_data['id'];
 }
+
+$sql = "SELECT * FROM surat_masuk ORDER BY id DESC";
+$result = mysqli_query($connect, $sql);
+
 
 ?>
 <!DOCTYPE html>
@@ -35,7 +39,7 @@ while ($admin_data = mysqli_fetch_array($result)) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Pendataan Surat | </title>
+    <title>Data Admin</title>
 
     <!-- Bootstrap -->
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -45,16 +49,12 @@ while ($admin_data = mysqli_fetch_array($result)) {
     <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
     <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-    <!-- bootstrap-wysiwyg -->
-    <link href="../vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
-    <!-- Select2 -->
-    <link href="../vendors/select2/dist/css/select2.min.css" rel="stylesheet">
-    <!-- Switchery -->
-    <link href="../vendors/switchery/dist/switchery.min.css" rel="stylesheet">
-    <!-- starrr -->
-    <link href="../vendors/starrr/dist/starrr.css" rel="stylesheet">
-    <!-- bootstrap-daterangepicker -->
-    <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
     <link href="../build/css/custom.min.css" rel="stylesheet">
@@ -127,7 +127,6 @@ while ($admin_data = mysqli_fetch_array($result)) {
                                         <li><a href="table_surat_keluar.php">Surat Keluar</a></li>
 
                                     </ul>
-
                                 </li>
                             </ul>
                         </div>
@@ -256,7 +255,7 @@ while ($admin_data = mysqli_fetch_array($result)) {
                 <div class="">
                     <div class="page-title">
                         <div class="title_left">
-                            <h3>Form Elements</h3>
+                            <h3>Surat Masuk </h3>
                         </div>
 
                         <div class="title_right">
@@ -270,116 +269,70 @@ while ($admin_data = mysqli_fetch_array($result)) {
                             </div>
                         </div>
                     </div>
+
                     <div class="clearfix"></div>
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                    <h2>Form Design <small>different form elements</small></h2>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                        </li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Settings 1</a>
-                                                </li>
-                                                <li><a href="#">Settings 2</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                        </li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="x_content">
-                                    <br />
-                                    <form id="demo-form2" method="POST" data-parsley-validate class="form-horizontal form-label-left">
-
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nama Lengkap <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="first-name" name="nama" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">Username <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="username" name="username" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="email" name="email" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nip">NIP <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="nip" name="nip" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="jabatan">Jabatan <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="jabatan" name="jabatan" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone">Telepon <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="tel" id="phone" name="telepon" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address">Alamat <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="address" name="alamat" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="password">Password <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="password" id="password" name="password" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Konfirmasi Password <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="password" id="last-name" name="password-confirmation" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
 
 
-                                        <div class="ln_solid"></div>
-                                        <div class="form-group">
-                                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                                <button class="btn btn-primary" type="button">Cancel</button>
-                                                <button class="btn btn-primary" type="reset">Reset</button>
-                                                <button type="submit" name="submited" class="btn btn-success">Submit</button>
-                                            </div>
-                                        </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Tabel Surat Masuk </h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="#">Settings 1</a>
+                                            </li>
+                                            <li><a href="#">Settings 2</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content">
+                                <p class="text-muted font-13 m-b-30">
+                                    Tambahkan Data Surat Masuk
+                                </p>
+                                <table id="datatable-buttons" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style='font-size:smaller;'>Topik</th>
+                                            <th style='font-size:smaller;'>Tanggal Masuk</th>
+                                            <th style='font-size:smaller;'>Pengirim</th>
+                                            <th style='font-size:smaller;'>Penerima</th>
+                                            <th style='font-size:smaller;'>Petugas ( Admin )</th>
+                                            <th style='font-size:smaller;'>Action</th>
+                                        </tr>
+                                    </thead>
 
-                                    </form>
-                                </div>
+
+                                    <tbody>
+                                        <?php 
+
+                                        while ($data_surat_masuk = mysqli_fetch_array($result)) {
+                                          echo "<tr>";
+                                          echo "<td style='font-size:smaller;'>" . $data_surat_masuk['topic'] . "</td>";
+                                          echo "<td style='font-size:smaller;'>" . $data_surat_masuk['entry_date'] . "</td>";
+                                          echo "<td style='font-size:smaller;'>" . $data_surat_masuk['sender'] . "</td>";
+                                          echo "<td style='font-size:smaller;'>" . $data_surat_masuk['receiver'] . "</td>";
+                                          echo "<td style='font-size:smaller;'>" . $data_surat_masuk['_admin'] . "</td>";
+                                          echo "<td style='font-size:smaller;'><a href='edit_incoming_mail.php?id=$data_surat_masuk[id]'><button type='button' class='btn btn-info'>Edit</button></a></td>";
+                                          echo "<td style='font-size:smaller;'><a href='delete_surat_masuk.php?id=$data_surat_masuk[id]'><button type='button' class='btn btn-danger'>Delete</button></a></td>";
+                                          echo "</tr>";
+                                        }
+                                        ?>
+
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
+
 
                     <!-- /page content -->
 
@@ -402,73 +355,28 @@ while ($admin_data = mysqli_fetch_array($result)) {
             <script src="../vendors/fastclick/lib/fastclick.js"></script>
             <!-- NProgress -->
             <script src="../vendors/nprogress/nprogress.js"></script>
-            <!-- bootstrap-progressbar -->
-            <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
             <!-- iCheck -->
             <script src="../vendors/iCheck/icheck.min.js"></script>
-            <!-- bootstrap-daterangepicker -->
-            <script src="../vendors/moment/min/moment.min.js"></script>
-            <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-            <!-- bootstrap-wysiwyg -->
-            <script src="../vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
-            <script src="../vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
-            <script src="../vendors/google-code-prettify/src/prettify.js"></script>
-            <!-- jQuery Tags Input -->
-            <script src="../vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
-            <!-- Switchery -->
-            <script src="../vendors/switchery/dist/switchery.min.js"></script>
-            <!-- Select2 -->
-            <script src="../vendors/select2/dist/js/select2.full.min.js"></script>
-            <!-- Parsley -->
-            <script src="../vendors/parsleyjs/dist/parsley.min.js"></script>
-            <!-- Autosize -->
-            <script src="../vendors/autosize/dist/autosize.min.js"></script>
-            <!-- jQuery autocomplete -->
-            <script src="../vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
-            <!-- starrr -->
-            <script src="../vendors/starrr/dist/starrr.js"></script>
+            <!-- Datatables -->
+            <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+            <script src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+            <script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+            <script src="../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+            <script src="../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+            <script src="../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+            <script src="../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+            <script src="../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+            <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+            <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+            <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+            <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+            <script src="../vendors/jszip/dist/jszip.min.js"></script>
+            <script src="../vendors/pdfmake/build/pdfmake.min.js"></script>
+            <script src="../vendors/pdfmake/build/vfs_fonts.js"></script>
+
             <!-- Custom Theme Scripts -->
             <script src="../build/js/custom.min.js"></script>
 
-
-
-
-            <?php 
-            include_once("./config/config.php");
-
-            if (isset($_POST["submited"])) {
-                $username = $_POST['username'];
-                $password = $_POST['password'];
-                $nama = $_POST['nama'];
-                $email = $_POST['email'];
-                $nip = $_POST['nip'];
-                $alamat = $_POST['alamat'];
-                $jabatan = $_POST['jabatan'];
-                $telepon = $_POST['telepon'];
-                $password = $_POST['password'];
-
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-                $getUsername = mysqli_query($connect, "SELECT username FROM admin WHERE username ='$username'");
-                $getNip = mysqli_query($connect, "SELECT nip FROM admin WHERE nip ='$nip'");
-                $getEmail = mysqli_query($connect, "SELECT email FROM admin WHERE email ='$email'");
-
-                if (mysqli_fetch_assoc($getUsername)) {
-                    echo "<script>alert('Sign Up Gagal,Username sudah dipakai')</script>";
-                    return false;
-                } else if (mysqli_fetch_assoc($getNip)) {
-                    echo "<script>alert('Sign Up Gagal,NIP sudah dipakai')</script>";
-                    return false;
-                } else if (mysqli_fetch_assoc($getEmail)) {
-                    echo "<script>alert('Sign Up Gagal,Email sudah dipakai')</script>";
-                    return false;
-                } else {
-                    $sql = " INSERT INTO `admin`(`id`, `nama`, `telepon`, `nip`, `jabatan`, `alamat`, `username`, `password_user`, `email`) VALUES ('  ','$nama  ','$telepon  ','$nip  ','$jabatan  ','$alamat  ','$username  ','$hashedPassword', '$email')";
-                    mysqli_query($connect, $sql);
-                };
-            };
-
-            ?>
 </body>
 
 </html> 

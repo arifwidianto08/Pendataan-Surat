@@ -1,14 +1,14 @@
 <?php 
 session_start();
 
-if (!isset($_SESSION["login"])) {
+if(!isset($_SESSION["login"])){
     header("Location: ./login.php");
     exit;
-};
+}
 
 include("./config/config.php");
 
-$id_admin = $_SESSION["user_id"];
+$id_admin=$_SESSION["user_id"];
 // echo "<script>console.log('$id_admin')</script>";
 $sql = "SELECT * FROM admin WHERE id=$id_admin";
 $result = mysqli_query($connect, $sql);
@@ -23,7 +23,6 @@ while ($admin_data = mysqli_fetch_array($result)) {
     $data_email = $admin_data['email'];
     $id = $admin_data['id'];
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,6 +54,10 @@ while ($admin_data = mysqli_fetch_array($result)) {
     <link href="../vendors/starrr/dist/starrr.css" rel="stylesheet">
     <!-- bootstrap-daterangepicker -->
     <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- PNotify -->
+    <link href="../vendors/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="../vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="../vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
     <link href="../build/css/custom.min.css" rel="stylesheet">
@@ -256,7 +259,7 @@ while ($admin_data = mysqli_fetch_array($result)) {
                 <div class="">
                     <div class="page-title">
                         <div class="title_left">
-                            <h3>Form Elements</h3>
+                            <h3>Tambah Admin</h3>
                         </div>
 
                         <div class="title_right">
@@ -275,7 +278,7 @@ while ($admin_data = mysqli_fetch_array($result)) {
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>Form Design <small>different form elements</small></h2>
+                                    <h2>Tambah Admin baru </h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
@@ -301,14 +304,14 @@ while ($admin_data = mysqli_fetch_array($result)) {
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nama Lengkap <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="first-name" name="nama" required="required" class="form-control col-md-7 col-xs-12">
+                                                <input type="text" id="first-name" name="nama" value="<?php echo $data_nama ?>" required="required" class="form-control col-md-7 col-xs-12">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">Username <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="username" name="username" required="required" class="form-control col-md-7 col-xs-12">
+                                                <input type="text" id="username" name="username" value="<?php echo $data_username ?>" required="required" class="form-control col-md-7 col-xs-12">
                                             </div>
                                         </div>
 
@@ -316,28 +319,28 @@ while ($admin_data = mysqli_fetch_array($result)) {
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="email" name="email" required="required" class="form-control col-md-7 col-xs-12">
+                                                <input type="email" id="email" name="email" value="<?php echo $data_email ?>" required="required" class="form-control col-md-7 col-xs-12">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nip">NIP <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="nip" name="nip" required="required" class="form-control col-md-7 col-xs-12">
+                                                <input type="text" id="nip" name="nip" value="<?php echo $data_nip ?>" required="required" class="form-control col-md-7 col-xs-12">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="jabatan">Jabatan <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="jabatan" name="jabatan" required="required" class="form-control col-md-7 col-xs-12">
+                                                <input type="text" id="jabatan" name="jabatan" value="<?php echo $data_jabatan ?>" required="required" class="form-control col-md-7 col-xs-12">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone">Telepon <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="tel" id="phone" name="telepon" required="required" class="form-control col-md-7 col-xs-12">
+                                                <input type="tel" id="phone" name="telepon" required="required" value="<?php echo $data_telepon ?>" class="form-control col-md-7 col-xs-12">
                                             </div>
                                         </div>
 
@@ -345,36 +348,17 @@ while ($admin_data = mysqli_fetch_array($result)) {
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address">Alamat <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="address" name="alamat" required="required" class="form-control col-md-7 col-xs-12">
+                                                <input type="text" id="address" name="alamat" value="<?php echo $data_alamat ?>" required="required" class="form-control col-md-7 col-xs-12">
                                             </div>
                                         </div>
-
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="password">Password <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="password" id="password" name="password" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Konfirmasi Password <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="password" id="last-name" name="password-confirmation" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-
-
                                         <div class="ln_solid"></div>
                                         <div class="form-group">
                                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                                <button class="btn btn-primary" type="button">Cancel</button>
+
                                                 <button class="btn btn-primary" type="reset">Reset</button>
-                                                <button type="submit" name="submited" class="btn btn-success">Submit</button>
+                                                <button type="submit" name="submited" class="btn btn-success">Update</button>
                                             </div>
                                         </div>
-
                                     </form>
                                 </div>
                             </div>
@@ -429,6 +413,10 @@ while ($admin_data = mysqli_fetch_array($result)) {
             <script src="../vendors/starrr/dist/starrr.js"></script>
             <!-- Custom Theme Scripts -->
             <script src="../build/js/custom.min.js"></script>
+            <!-- PNotify -->
+            <script src="../vendors/pnotify/dist/pnotify.js"></script>
+            <script src="../vendors/pnotify/dist/pnotify.buttons.js"></script>
+            <script src="../vendors/pnotify/dist/pnotify.nonblock.js"></script>
 
 
 
@@ -438,36 +426,19 @@ while ($admin_data = mysqli_fetch_array($result)) {
 
             if (isset($_POST["submited"])) {
                 $username = $_POST['username'];
-                $password = $_POST['password'];
                 $nama = $_POST['nama'];
                 $email = $_POST['email'];
                 $nip = $_POST['nip'];
                 $alamat = $_POST['alamat'];
                 $jabatan = $_POST['jabatan'];
                 $telepon = $_POST['telepon'];
-                $password = $_POST['password'];
-
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-                $getUsername = mysqli_query($connect, "SELECT username FROM admin WHERE username ='$username'");
-                $getNip = mysqli_query($connect, "SELECT nip FROM admin WHERE nip ='$nip'");
-                $getEmail = mysqli_query($connect, "SELECT email FROM admin WHERE email ='$email'");
-
-                if (mysqli_fetch_assoc($getUsername)) {
-                    echo "<script>alert('Sign Up Gagal,Username sudah dipakai')</script>";
-                    return false;
-                } else if (mysqli_fetch_assoc($getNip)) {
-                    echo "<script>alert('Sign Up Gagal,NIP sudah dipakai')</script>";
-                    return false;
-                } else if (mysqli_fetch_assoc($getEmail)) {
-                    echo "<script>alert('Sign Up Gagal,Email sudah dipakai')</script>";
-                    return false;
-                } else {
-                    $sql = " INSERT INTO `admin`(`id`, `nama`, `telepon`, `nip`, `jabatan`, `alamat`, `username`, `password_user`, `email`) VALUES ('  ','$nama  ','$telepon  ','$nip  ','$jabatan  ','$alamat  ','$username  ','$hashedPassword', '$email')";
-                    mysqli_query($connect, $sql);
-                };
-            };
-
+                $id_admin = $_SESSION["user_id"];
+                echo "<script>console.log('$id_admin')</script>";
+                $query_update = "UPDATE `admin` SET `nama`='$nama',`telepon`='$telepon',`nip`='$nip',`jabatan`='$jabatan',`alamat`='$alamat',`username`='$username',`email`='$email' WHERE `id`= $id_admin;";
+                mysqli_query($connect, $query_update);
+                mysqli_affected_rows($connect);
+                echo "<script>location.href='index.php'</script>";
+            };   
             ?>
 </body>
 

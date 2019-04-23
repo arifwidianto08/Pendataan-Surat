@@ -2,28 +2,26 @@
 session_start();
 
 if (!isset($_SESSION["login"])) {
-    header("Location: ./login.php");
-    exit;
+  header("Location: ./login.php");
+  exit;
 };
 
 include("./config/config.php");
 
-$id_admin = $_SESSION["user_id"];
-// echo "<script>console.log('$id_admin')</script>";
-$sql = "SELECT * FROM admin WHERE id=$id_admin";
+$id_surat = $_SESSION["user_id"];
+// echo "<script>console.log('$id_surat')</script>";
+$sql = "SELECT * FROM surat_masuk WHERE id=$id_surat";
 $result = mysqli_query($connect, $sql);
 
-while ($admin_data = mysqli_fetch_array($result)) {
-    $data_nama = $admin_data['nama'];
-    $data_telepon = $admin_data['telepon'];
-    $data_nip = $admin_data['nip'];
-    $data_jabatan = $admin_data['jabatan'];
-    $data_alamat = $admin_data['alamat'];
-    $data_username = $admin_data['username'];
-    $data_email = $admin_data['email'];
-    $id = $admin_data['id'];
+while ($data_surat_masuk = mysqli_fetch_array($result)) {
+    $data_admin = $data_surat_masuk['_admin'];
+    $data_topic = $data_surat_masuk['topic'];
+    $data_entry_date = $data_surat_masuk['entry_date'];
+    $data_sender = $data_surat_masuk['sender'];
+    $data_receiver = $data_surat_masuk['receiver'];
+    $admin_id = $data_surat_masuk['admin_id'];
+    $id_surat_masuk = $data_surat_masuk['id'];
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,7 +76,7 @@ while ($admin_data = mysqli_fetch_array($result)) {
                         </div>
                         <div class="profile_info">
                             <span>Selamat Datang,</span>
-                                                       <h2><?php echo $data_nama ?></h2>
+                            <h2><?php echo $data_admin ?></h2>
                         </div>
                     </div>
                     <!-- /menu profile quick info -->
@@ -256,7 +254,7 @@ while ($admin_data = mysqli_fetch_array($result)) {
                 <div class="">
                     <div class="page-title">
                         <div class="title_left">
-                            <h3>Form Elements</h3>
+                            <h3>Surat Masuk</h3>
                         </div>
 
                         <div class="title_right">
@@ -275,7 +273,7 @@ while ($admin_data = mysqli_fetch_array($result)) {
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>Form Design <small>different form elements</small></h2>
+                                    <h2>Masukkan Data Surat Masuk</h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
@@ -296,76 +294,53 @@ while ($admin_data = mysqli_fetch_array($result)) {
                                 <div class="x_content">
                                     <br />
                                     <form id="demo-form2" method="POST" data-parsley-validate class="form-horizontal form-label-left">
+                                    <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Admin <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" id="first-name"  name="admin_name" value="<?php echo $data_admin ?>" required="required" class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Topic <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <input type="text" value="<?php echo $data_topic ?>" id="first-name" name="topic" required="required" class="form-control col-md-7 col-xs-12">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">Tanggal Masuk <span class="required">*</span>
+                                            </label>
+                                            <fieldset>
+                          <div class="control-group">
+                            <div class="controls">
+                              <div class="col-md-8 style="margin-bottom: 0" xdisplay_inputx form-group has-feedback">
+                                <input type="text" value="<?php echo $data_entry_date ?>" class="form-control has-feedback-left" id="single_cal4" placeholder="Entry Date" name="entry_date" aria-describedby="inputSuccess2Status4">
+                                <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                                <span id="inputSuccess2Status4" class="sr-only">(success)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </fieldset>
+                                        </div>
 
                                         <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nama Lengkap <span class="required">*</span>
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sender">Pengirim <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="first-name" name="nama" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="username">Username <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="username" name="username" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="email" name="email" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nip">NIP <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="nip" name="nip" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="jabatan">Jabatan <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="jabatan" name="jabatan" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone">Telepon <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="tel" id="phone" name="telepon" required="required" class="form-control col-md-7 col-xs-12">
+                                                <input type="text" value="<?php echo $data_sender ?>" id="sender" name="sender" required="required" class="form-control col-md-7 col-xs-12">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address">Alamat <span class="required">*</span>
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="receiver">Penerima <span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="text" id="address" name="alamat" required="required" class="form-control col-md-7 col-xs-12">
+                                                <input type="text" id="receiver" value="<?php echo $data_receiver ?>" name="receiver" required="required" class="form-control col-md-7 col-xs-12">
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="password">Password <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="password" id="password" name="password" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Konfirmasi Password <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <input type="password" id="last-name" name="password-confirmation" required="required" class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-
-
+                                        <input type="hidden"  name="id_surat_masuk" value="<?php echo $id_surat_masuk ?>" required="required" class="form-control col-md-7 col-xs-12">
                                         <div class="ln_solid"></div>
                                         <div class="form-group">
                                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -437,36 +412,18 @@ while ($admin_data = mysqli_fetch_array($result)) {
             include_once("./config/config.php");
 
             if (isset($_POST["submited"])) {
-                $username = $_POST['username'];
-                $password = $_POST['password'];
-                $nama = $_POST['nama'];
-                $email = $_POST['email'];
-                $nip = $_POST['nip'];
-                $alamat = $_POST['alamat'];
-                $jabatan = $_POST['jabatan'];
-                $telepon = $_POST['telepon'];
-                $password = $_POST['password'];
-
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-                $getUsername = mysqli_query($connect, "SELECT username FROM admin WHERE username ='$username'");
-                $getNip = mysqli_query($connect, "SELECT nip FROM admin WHERE nip ='$nip'");
-                $getEmail = mysqli_query($connect, "SELECT email FROM admin WHERE email ='$email'");
-
-                if (mysqli_fetch_assoc($getUsername)) {
-                    echo "<script>alert('Sign Up Gagal,Username sudah dipakai')</script>";
-                    return false;
-                } else if (mysqli_fetch_assoc($getNip)) {
-                    echo "<script>alert('Sign Up Gagal,NIP sudah dipakai')</script>";
-                    return false;
-                } else if (mysqli_fetch_assoc($getEmail)) {
-                    echo "<script>alert('Sign Up Gagal,Email sudah dipakai')</script>";
-                    return false;
-                } else {
-                    $sql = " INSERT INTO `admin`(`id`, `nama`, `telepon`, `nip`, `jabatan`, `alamat`, `username`, `password_user`, `email`) VALUES ('  ','$nama  ','$telepon  ','$nip  ','$jabatan  ','$alamat  ','$username  ','$hashedPassword', '$email')";
-                    mysqli_query($connect, $sql);
-                };
+              $topic = $_POST['topic'];
+              $entry_date = $_POST['entry_date'];
+              $sender = $_POST['sender'];
+              $receiver = $_POST['receiver'];
+              $admin_name = $_POST['admin_name'];
+              $admin_id = $admin_id;
+              $sql = "UPDATE `surat_masuk` SET `topic`='$topic', `entry_date`='$entry_date', `sender`='$sender', `receiver`='$receiver' ,`_admin`='$admin_name', `admin_id`='$admin_id' WHERE id='$id_surat_masuk' ";
+              mysqli_query($connect, $sql);
+              echo "<script>location.href='table_surat_masuk.php'</script>";
             };
+
+
 
             ?>
 </body>
