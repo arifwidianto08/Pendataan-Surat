@@ -1,3 +1,5 @@
+This project author was @arifwidianto08
+
 # gentelella
 
 Gentelella Admin is a free to use Bootstrap admin template.
